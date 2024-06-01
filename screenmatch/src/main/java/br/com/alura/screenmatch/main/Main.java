@@ -3,9 +3,11 @@ package br.com.alura.screenmatch.main;
 import br.com.alura.screenmatch.model.SeasonData;
 import br.com.alura.screenmatch.model.SeriesData;
 import br.com.alura.screenmatch.model.SeriesEpisodeData;
+import br.com.alura.screenmatch.model.SeriesEpisodes;
 import br.com.alura.screenmatch.service.ApiConsumption;
 import br.com.alura.screenmatch.service.DataConversion;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -51,5 +53,25 @@ public class Main {
                 .sorted(Comparator.comparing(SeriesEpisodeData::rating).reversed())
                 .limit(5)
                 .forEach(System.out::println);
+
+        List<SeriesEpisodes> episodes = seasons.stream()
+                .flatMap(s -> s.episodes().stream().map(d -> new SeriesEpisodes(s.number(), d)))
+                .collect(Collectors.toList());
+
+        episodes.forEach(System.out::println);
+
+        System.out.println("Search episodes by year: ");
+        var year = scanner.nextInt();
+        scanner.nextLine();
+
+        LocalDate searchDate = LocalDate.of(year,1,1);
+
+        episodes.stream()
+                .filter(e -> e.getReleaseDate() != null && e.getReleaseDate().isAfter(searchDate))
+                .forEach(e -> System.out.println(
+                        "Season: " + e.getSeasonNumber() +
+                                " | Episode: " + e.getTitle() +
+                                " | Release Date: " + e.getReleaseDate()
+                ));
     }
 }
