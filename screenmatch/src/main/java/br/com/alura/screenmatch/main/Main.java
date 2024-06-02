@@ -47,11 +47,16 @@ public class Main {
                 .flatMap(s -> s.episodes().stream())
                 .collect(Collectors.toList());
 
-        System.out.println("Top 5 episodes: ");
+        System.out.println("Top 10 episodes: ");
         episodesData.stream()
                 .filter(e -> !e.rating().equalsIgnoreCase("N/A"))
+                .peek(e -> System.out.println("First filter(N/A) " + e))
                 .sorted(Comparator.comparing(SeriesEpisodeData::rating).reversed())
-                .limit(5)
+                .peek(e -> System.out.println("Ordered " + e))
+                .limit(10)
+                .peek(e -> System.out.println("Limit " + e))
+                .map(e -> e.title().toUpperCase())
+                .peek(e -> System.out.println("Map " + e))
                 .forEach(System.out::println);
 
         List<SeriesEpisodes> episodes = seasons.stream()
