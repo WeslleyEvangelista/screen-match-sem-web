@@ -8,10 +8,7 @@ import br.com.alura.screenmatch.service.ApiConsumption;
 import br.com.alura.screenmatch.service.DataConversion;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -64,6 +61,20 @@ public class Main {
                 .collect(Collectors.toList());
 
         episodes.forEach(System.out::println);
+
+        System.out.println("Enter an title excerpt of the episode of the series that you are looking for: ");
+        var titlePart = scanner.nextLine();
+
+        Optional<SeriesEpisodes> searchedEpisode = episodes.stream()
+                .filter(e -> e.getTitle().toUpperCase().contains(titlePart.toUpperCase()))
+                .findFirst();
+
+        if (searchedEpisode.isPresent()) {
+            System.out.println("Episode found!");
+            System.out.println("Season: " + searchedEpisode.get().getSeasonNumber());
+        } else {
+            System.out.println("Episode not found!");
+        }
 
         System.out.println("Search episodes by year: ");
         var year = scanner.nextInt();
