@@ -89,5 +89,22 @@ public class Main {
                                 " | Episode: " + e.getTitle() +
                                 " | Release Date: " + e.getReleaseDate()
                 ));
+
+        Map<Integer, Double> ratingBySeason = episodes.stream()
+                .filter(e -> e.getRating() > 0.0)
+                .collect(Collectors.groupingBy(
+                                SeriesEpisodes::getSeasonNumber,
+                                Collectors.averagingDouble(SeriesEpisodes::getRating)));
+
+        System.out.println(ratingBySeason);
+
+        DoubleSummaryStatistics statistics = episodes.stream()
+                .filter(e -> e.getRating() > 0.0)
+                .collect(Collectors.summarizingDouble(SeriesEpisodes::getRating));
+
+        System.out.println("Average rating: " + statistics.getAverage());
+        System.out.println("Lowest rating: " + statistics.getMin());
+        System.out.println("Highest rating: " + statistics.getMax());
+        System.out.println("Total episodes rated: " + statistics.getCount());
     }
 }
